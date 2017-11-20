@@ -22,4 +22,9 @@ public class ItemStockUpdate {
 
 		return count + countDiff;
 	}
+
+	ItemStockUpdate withId(long id) {
+		this.id = id;
+		return this;
+	}
 }
