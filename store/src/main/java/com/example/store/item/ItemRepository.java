@@ -1,12 +1,7 @@
 package com.example.store.item;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-interface ItemRepository {
+interface ItemRepository extends JpaRepository<Item, Long> {
 
-	List<Item> findAll();
-
-	Item getOne(Long id);
-
-	Item save(Item item);
 }

@@ -5,8 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
+import javax.persistence.EntityNotFoundException
+import javax.transaction.Transactional
+
 @SpringBootTest(classes = [StoreApplication, ItemTestConfig],
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Transactional
 class ItemServiceSpec extends Specification {
 
     @Autowired ItemRepository repository
@@ -23,7 +27,7 @@ class ItemServiceSpec extends Specification {
         when:
             items.update(new ItemUpdate(123L, 'test', 23.99))
         then:
-            thrown IllegalArgumentException
+            thrown EntityNotFoundException
     }
 
     def "should update item details"() {
