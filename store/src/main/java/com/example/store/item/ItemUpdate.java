@@ -1,0 +1,19 @@
+package com.example.store.item;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+class ItemUpdate {
+
+	private long id;
+
+	private String name;
+
+	private BigDecimal price;
+}
