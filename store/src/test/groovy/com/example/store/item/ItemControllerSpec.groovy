@@ -1,26 +1,18 @@
 package com.example.store.item
 
-import com.example.store.StoreApplication
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import spock.lang.Specification
-
-import javax.transaction.Transactional
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@SpringBootTest(classes = [StoreApplication, ItemTestConfig],
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @AutoConfigureJson
-@Transactional
-class ItemControllerSpec extends Specification {
+class ItemControllerSpec extends SpecBase {
 
     @Autowired MockMvc mvc
 
@@ -61,6 +53,15 @@ class ItemControllerSpec extends Specification {
                 .andExpect(jsonPath('$.price').value(10))
     }
 
+    def "Should not find not existing item"() {
+        when:
+            def resp = mvc.perform(get('/items/123'))
+        then:
+            resp.andExpect(status().isNotFound())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath('$.message').value("Not found"))
+    }
+
     def "Should update item"() {
         when:
             def resp = mvc.perform(put('/items/3').contentType(APPLICATION_JSON_UTF8)
@@ -85,5 +86,16 @@ class ItemControllerSpec extends Specification {
                 .andExpect(jsonPath('$.name').value('D'))
                 .andExpect(jsonPath('$.count').value(73))
                 .andExpect(jsonPath('$.price').value(25))
+    }
+
+    def "Should not update item stock below available count"() {
+        when:
+            def resp = mvc.perform(put('/items/4/stock').contentType(APPLICATION_JSON_UTF8)
+                    .content(json.writeValueAsString([countDiff: -1000])))
+        then:
+        resp.andExpect(status().isBadRequest())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath('$.message').value('Item D has only 100 out of -1000 requested'))
+
     }
 }

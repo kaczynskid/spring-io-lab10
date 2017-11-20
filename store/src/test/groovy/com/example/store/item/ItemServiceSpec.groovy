@@ -1,17 +1,10 @@
 package com.example.store.item
 
-import com.example.store.StoreApplication
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import spock.lang.Specification
 
 import javax.persistence.EntityNotFoundException
-import javax.transaction.Transactional
 
-@SpringBootTest(classes = [StoreApplication, ItemTestConfig],
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional
-class ItemServiceSpec extends Specification {
+class ItemServiceSpec extends SpecBase {
 
     @Autowired ItemRepository repository
     @Autowired ItemService items
