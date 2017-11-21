@@ -27,7 +27,6 @@ public class Item {
 	private Long id;
 
 	@NotNull
-	@Lob
 	private String name;
 
 	@NotNull

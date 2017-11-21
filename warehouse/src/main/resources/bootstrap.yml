@@ -1,3 +1,6 @@
+info:
+  instanceId: ${spring.application.name}-${random.value}
+
 spring:
   application:
     name: warehouse
@@ -13,5 +16,6 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8765/eureka
   instance:
+    instanceId: ${info.instanceId}
     metadata-map:
-      app-name: ${spring.application.name}
+      app-name: ${info.instanceId}
