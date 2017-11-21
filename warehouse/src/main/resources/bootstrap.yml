@@ -1,6 +1,6 @@
 spring:
   application:
-    name: store
+    name: warehouse
   cloud:
     config:
       fail-fast: true
