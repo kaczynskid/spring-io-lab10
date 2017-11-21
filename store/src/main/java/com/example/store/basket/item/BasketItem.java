@@ -51,7 +51,7 @@ public class BasketItem {
 	@DecimalMin("0.01")
 	private BigDecimal totalPrice = ZERO;
 
-	private Long specialId;
+	private String specialId;
 
 	public BasketItem(Long basketId, Long itemId) {
 		this.basketId = basketId;
