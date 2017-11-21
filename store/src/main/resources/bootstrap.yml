@@ -4,4 +4,11 @@ spring:
   cloud:
     config:
       fail-fast: true
-      uri: http://localhost:8899/
+      discovery:
+        enabled: true
+        service-id: config
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8765/eureka
