@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "marketing", fallback = SpecialClientFallback.class)
 public interface SpecialClient {
 
-    @PostMapping("/specials/{itemId}/calculation")
+    @PostMapping("/specials/{itemId}/calculate")
     SpecialCalculation calculateFor(@PathVariable("itemId") long itemId, @RequestBody SpecialCalculationRequest request);
 
 }

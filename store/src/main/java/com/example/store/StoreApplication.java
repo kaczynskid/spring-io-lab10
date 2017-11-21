@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -28,6 +29,7 @@ public class StoreApplication {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "spring.cloud.config.enabled", havingValue = "true", matchIfMissing = true)
 	public ApplicationRunner discoveryClientDemo(DiscoveryClient discovery) {
 		return args -> {
 			try {
@@ -55,6 +57,7 @@ public class StoreApplication {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "spring.cloud.config.enabled", havingValue = "true", matchIfMissing = true)
 	public ApplicationRunner restTemplateDemo(RestTemplate rest) {
 		return args -> {
 			ParameterizedTypeReference<List<ItemRepresentation>> responseType =
