@@ -4,7 +4,6 @@ import com.example.store.MathProperties;
 import com.example.store.item.ItemClient;
 import com.example.store.item.ItemRepresentation;
 import com.example.store.special.SpecialCalculation;
-import com.example.store.special.SpecialCalculationRequest;
 import com.example.store.special.SpecialClient;
 import org.springframework.stereotype.Component;
 
@@ -55,7 +54,8 @@ public class BasketItemService {
 
 	private BasketUpdateDiff updateInBasket(BasketItem basketItem, int count) {
 		ItemRepresentation changes = items.findOne(basketItem.getItemId());
-		SpecialCalculation calculation = specials.calculateFor(basketItem.getItemId(), requestCalculationFor(count));
+		SpecialCalculation calculation = specials.calculateFor(basketItem.getItemId(),
+				requestCalculationFor(changes.getPrice(), count));
 		BasketUpdateDiff diff = basketItem.update(changes, count, calculation, math);
 		basketItems.save(basketItem);
 
