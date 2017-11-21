@@ -18,10 +18,8 @@ public class SpecialController {
 	}
 
 	@GetMapping
-	public List<SpecialRepresentation> findAll(@RequestParam(required = false) Long itemId) {
-		return ofNullable(itemId)
-				.map(specials::findByItemId)
-				.orElse(specials.findAll()).stream()
+	public List<SpecialRepresentation> findAll() {
+		return specials.findAll().stream()
 				.map(SpecialRepresentation::of)
 				.collect(Collectors.toList());
 	}
