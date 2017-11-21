@@ -68,6 +68,6 @@ public class BasketItemServiceTest {
 
         assertThat(diff.getCountDiff()).isEqualTo(5);
         assertThat(diff.getPriceDiff()).isEqualTo(BigDecimal.valueOf(150.0));
-        assertThat(basketItems.findOneItem(basket.getId(), itemId).getSpecialId()).isEqualTo("1");
+        assertThat(basketItems.findOneItem(basket.getId(), itemId).getSpecialId()).isEqualTo("abcdefghijklmn0123456789");
     }
 }

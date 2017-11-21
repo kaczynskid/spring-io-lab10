@@ -1,11 +1,13 @@
 package com.example.marketing.special;
 
+import com.example.marketing.special.calculate.SpecialCalculation;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/specials")
@@ -21,11 +23,24 @@ public class SpecialController {
 	public List<SpecialRepresentation> findAll() {
 		return specials.findAll().stream()
 				.map(SpecialRepresentation::of)
-				.collect(Collectors.toList());
+				.collect(toList());
 	}
 
 	@PostMapping
 	public SpecialRepresentation add(@RequestBody SpecialRepresentation request) {
 		return SpecialRepresentation.of(specials.create(request.asSpecial()));
 	}
+
+	@PostMapping("/{itemId}/calculate")
+	public SpecialCalculation calculateFor(@PathVariable("itemId") long itemId,
+										   @RequestBody SpecialCalculationRequest request) {
+		return specials.calculateFor(itemId, request.getUnitPrice(), request.getUnitCount());
+	}
+}
+
+@Data
+class SpecialCalculationRequest {
+
+	private BigDecimal unitPrice;
+	private int unitCount;
 }
