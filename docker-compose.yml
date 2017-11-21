@@ -1,0 +1,75 @@
+version: '3'
+services:
+
+  registry:
+    image: "sprio/config"
+    ports: "8765:8765"
+    environment:
+      SERVER_PORT: "8765"
+
+  config:
+    image: "sprio/config"
+    ports: "8899:8899"
+    environment:
+      SERVER_PORT: "8899"
+      EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE: "http://localhost:registry/eureka"
+
+  gateway:
+    image: "sprio/gateway"
+    ports: "9000:9000"
+    environment:
+      SERVER_PORT: "9000"
+      EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE: "http://localhost:registry/eureka"
+
+
+  warehouse-data:
+    image: "postgres:9"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ".data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: "sprio"
+      POSTGRES_DB: "warehouse"
+
+  warehouse:
+    image: "sprio/warehouse"
+    ports:
+      - "9999:9999"
+    environment:
+      SERVER_PORT: "9999"
+      POSTGRES_PORT_5432_TCP_ADDR: "warehouse-data"
+      EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE: "http://localhost:registry/eureka"
+
+  store-data:
+    image: "mysql:5.7"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ".data:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "sprio"
+      MYSQL_DATABASE: "store"
+
+  store:
+    image: "sprio/store"
+    ports: "9998:9998"
+    environment:
+      SERVER_PORT: "9998"
+      MYSQL_PORT_3306_TCP_ADDR: "store-data"
+      EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE: "http://localhost:registry/eureka"
+
+  marketing-data:
+    image: "mongo:3.0"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ".data:/data/db"
+
+  marketing:
+    image: "sprio/marketing"
+    ports: "9997:9997"
+    environment:
+      SERVER_PORT: "9997"
+      MONGODB_PORT_27017_TCP_ADDR: "marketing-data"
+      EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE: "http://localhost:registry/eureka"
