@@ -4,15 +4,12 @@ import com.example.store.basket.Basket;
 import com.example.store.basket.BasketService;
 import com.example.store.item.ItemClient;
 import com.example.store.item.ItemRepresentation;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -42,6 +39,7 @@ public class BasketItemServiceTest {
     @MockBean ItemClient items;
 
     @Autowired BasketService baskets;
+    @Autowired BasketItemService basketItems;
 
     @Test
     public void shouldUpdateBasketWithRegularPriceItem() throws Exception {
@@ -55,10 +53,21 @@ public class BasketItemServiceTest {
 
         assertThat(diff.getCountDiff()).isEqualTo(2);
         assertThat(diff.getPriceDiff()).isEqualTo(BigDecimal.valueOf(80.0));
+        assertThat(basketItems.findOneItem(basket.getId(), itemId).getSpecialId()).isNull();
     }
 
-//    @Test
-//    public void shouldUpdatebasketWithSpecialPriceItem() throws Exception {
-//
-//    }
+    @Test
+    public void shouldUpdateBasketWithSpecialPriceItem() throws Exception {
+        Basket basket = baskets.create();
+        long itemId = 1L;
+        int count = 5;
+        when(items.findOne(itemId))
+                .thenReturn(new ItemRepresentation("A", BigDecimal.valueOf(40.0)));
+
+        BasketUpdateDiff diff = baskets.updateItem(basket.getId(), itemId, count);
+
+        assertThat(diff.getCountDiff()).isEqualTo(5);
+        assertThat(diff.getPriceDiff()).isEqualTo(BigDecimal.valueOf(150.0));
+        assertThat(basketItems.findOneItem(basket.getId(), itemId).getSpecialId()).isEqualTo("1");
+    }
 }
