@@ -2,6 +2,7 @@ package com.example.marketing.special;
 
 import com.example.marketing.special.calculate.SpecialCalculation;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RestController
 @RequestMapping("/specials")
 public class SpecialController {
@@ -34,7 +36,9 @@ public class SpecialController {
 	@PostMapping("/{itemId}/calculate")
 	public SpecialCalculation calculateFor(@PathVariable("itemId") long itemId,
 										   @RequestBody SpecialCalculationRequest request) {
-		return specials.calculateFor(itemId, request.getUnitPrice(), request.getUnitCount());
+		SpecialCalculation calculation = specials.calculateFor(itemId, request.getUnitPrice(), request.getUnitCount());
+		log.info("CALCULATED {}", calculation);
+		return calculation;
 	}
 }
 

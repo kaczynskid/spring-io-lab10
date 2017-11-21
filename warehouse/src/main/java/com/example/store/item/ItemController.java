@@ -1,11 +1,13 @@
 package com.example.store.item;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RestController
 @RequestMapping("/items")
 class ItemController {
@@ -28,7 +30,9 @@ class ItemController {
 
 	@GetMapping("/{id}")
 	public ItemRepresentation findOne(@PathVariable("id") long id) {
-		return ItemRepresentation.of(items.findOne(id));
+		ItemRepresentation item = ItemRepresentation.of(items.findOne(id));
+		log.info("GOT ITEM {}", item);
+		return item;
 	}
 
 	@PutMapping("/{id}")

@@ -2,11 +2,13 @@ package com.example.store.basket.item;
 
 import com.example.store.basket.BasketService;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/baskets/{basketId}/items")
 public class BasketItemController {
@@ -34,7 +36,10 @@ public class BasketItemController {
 	@PutMapping("/{itemId}")
 	public BasketUpdateDiff updateItem(@PathVariable("basketId") long basketId, @PathVariable("itemId") long itemId,
                                          @RequestBody UpdateBasketItem request) {
-		return basket.updateItem(basketId, itemId, request.getItemCount());
+		log.info("WILL UPDATE BASKET {} ITEM {} COUNT {}", basketId, itemId, request.getItemCount());
+		BasketUpdateDiff diff = basket.updateItem(basketId, itemId, request.getItemCount());
+		log.info("UPDATE DIFF {}", diff);
+		return diff;
 }
 }
 

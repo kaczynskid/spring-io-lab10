@@ -2,6 +2,7 @@ package com.example.store.item
 
 import com.example.store.WarehouseApplication
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext
 @SpringBootTest(classes = [WarehouseApplication, ItemTestConfig],
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
+@ActiveProfiles("test")
 class SpecBase extends Specification {
 
     @PersistenceContext

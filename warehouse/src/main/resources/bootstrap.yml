@@ -1,6 +1,9 @@
 info:
   instanceId: ${spring.application.name}-${random.value}
 
+server:
+  port: 9999
+
 spring:
   application:
     name: warehouse
