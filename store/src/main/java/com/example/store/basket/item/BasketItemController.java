@@ -1,5 +1,7 @@
 package com.example.store.basket.item;
 
+import com.example.store.basket.BasketService;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/baskets/{basketId}/items")
 public class BasketItemController {
 
+	private BasketService basket;
 	private BasketItemService basketItems;
 
-	public BasketItemController(BasketItemService basketItems) {
+	public BasketItemController(BasketService basket, BasketItemService basketItems) {
+		this.basket = basket;
 		this.basketItems = basketItems;
 	}
 
@@ -28,8 +32,14 @@ public class BasketItemController {
 	}
 
 	@PutMapping("/{itemId}")
-	public BasketItemRepresentation updateItem(@PathVariable("basketId") long basketId, @PathVariable("itemId") long itemId,
-                                         @RequestBody BasketUpdateDiff request) {
-		return null;
-	}
+	public BasketUpdateDiff updateItem(@PathVariable("basketId") long basketId, @PathVariable("itemId") long itemId,
+                                         @RequestBody UpdateBasketItem request) {
+		return basket.updateItem(basketId, itemId, request.getItemCount());
+}
+}
+
+@Data
+class UpdateBasketItem {
+
+	private int itemCount;
 }

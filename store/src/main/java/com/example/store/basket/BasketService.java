@@ -1,8 +1,11 @@
 package com.example.store.basket;
 
 import com.example.store.MathProperties;
+import com.example.store.basket.item.BasketItem;
 import com.example.store.basket.item.BasketItemService;
 import com.example.store.basket.item.BasketUpdateDiff;
+import com.example.store.item.ItemClient;
+import com.example.store.item.ItemRepresentation;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
@@ -28,8 +31,8 @@ public class BasketService {
 		return baskets.getOne(id);
 	}
 
-	public BasketUpdateDiff removeItem(long basketId, long itemId) {
-		return updateBasket(basketId, () -> items.removeItem(basketId, itemId));
+	public BasketUpdateDiff updateItem(long basketId, long itemId, int count) {
+		return updateBasket(basketId, () -> items.updateItem(basketId, itemId, count));
 	}
 
 	private BasketUpdateDiff updateBasket(long basketId, Supplier<BasketUpdateDiff> diffSupplier) {

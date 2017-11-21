@@ -13,7 +13,7 @@ create table basket_item (
   unit_price numeric(18, 4) not null,
   unit_count int not null,
   total_price numeric(18, 4) not null,
-  special_id bigint not null,
+  special_id bigint,
   constraint basket_item_fk foreign key (basket_id) references basket (id),
   constraint basket_item_uq unique index (basket_id, item_id)
 );
