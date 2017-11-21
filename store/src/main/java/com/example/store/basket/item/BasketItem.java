@@ -2,6 +2,7 @@ package com.example.store.basket.item;
 
 import com.example.store.MathProperties;
 import com.example.store.item.ItemRepresentation;
+import com.example.store.special.SpecialCalculation;
 import lombok.*;
 import org.springframework.util.Assert;
 
@@ -58,16 +59,18 @@ public class BasketItem {
 		this.itemId = itemId;
 	}
 
-	BasketUpdateDiff update(ItemRepresentation changes, int newUnitCount, MathProperties math) {
+	BasketUpdateDiff update(ItemRepresentation changes, int newUnitCount, SpecialCalculation special, MathProperties math) {
 		Assert.notNull(changes, "Item changes cannot be null");
 		Assert.isTrue(newUnitCount > 0, "UnitCount must be positive");
+		Assert.notNull(special, "SpecialCalculation cannot be null");
 		Assert.notNull(math, "Math cannot be null");
 
 		name = changes.getName();
 		unitPrice = changes.getPrice();
+		specialId = special.getSpecialId();
 		return new BasketUpdateDiff(
 				updateItemCount(newUnitCount),
-				updateTotalPrice(changes.getPrice().multiply(BigDecimal.valueOf(newUnitCount)), math));
+				updateTotalPrice(special.getTotalPrice(), math));
 	}
 
 

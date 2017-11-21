@@ -3,22 +3,28 @@ package com.example.store.basket.item;
 import com.example.store.MathProperties;
 import com.example.store.item.ItemClient;
 import com.example.store.item.ItemRepresentation;
+import com.example.store.special.SpecialCalculation;
+import com.example.store.special.SpecialCalculationRequest;
+import com.example.store.special.SpecialClient;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.example.store.special.SpecialCalculationRequest.requestCalculationFor;
 import static java.math.BigDecimal.ZERO;
 
 @Component
 public class BasketItemService {
 
 	private final BasketItemRepository basketItems;
-	private ItemClient items;
+	private final ItemClient items;
+	private final SpecialClient specials;
 	private final MathProperties math;
 
-	public BasketItemService(BasketItemRepository basketItems, ItemClient items, MathProperties math) {
+	public BasketItemService(BasketItemRepository basketItems, ItemClient items, SpecialClient specials, MathProperties math) {
 		this.basketItems = basketItems;
 		this.items = items;
+		this.specials = specials;
 		this.math = math;
 	}
 
@@ -49,7 +55,8 @@ public class BasketItemService {
 
 	private BasketUpdateDiff updateInBasket(BasketItem basketItem, int count) {
 		ItemRepresentation changes = items.findOne(basketItem.getItemId());
-		BasketUpdateDiff diff = basketItem.update(changes, count, math);
+		SpecialCalculation calculation = specials.calculateFor(basketItem.getItemId(), requestCalculationFor(count));
+		BasketUpdateDiff diff = basketItem.update(changes, count, calculation, math);
 		basketItems.save(basketItem);
 
 		return diff;
